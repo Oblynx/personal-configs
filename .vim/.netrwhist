@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/code'
+let g:netrw_dirhist_2='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/code/manifests'
+let g:netrw_dirhist_3='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/code/manifests/nova'
+let g:netrw_dirhist_4='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/code/manifests/level2/kvm/gva_project_006'
+let g:netrw_dirhist_5='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/.git'
+let g:netrw_dirhist_6='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/code/manifests/nova'
+let g:netrw_dirhist_7='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute/data/hostgroup/cloud_compute/level1/all_in_one'
+let g:netrw_dirhist_8='/afs/cern.ch/user/k/kosamara/ws/it-puppet-hostgroup-cloud_compute'
