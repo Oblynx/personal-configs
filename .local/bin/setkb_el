@@ -1,0 +1,5 @@
+#!/bin/bash
+setxkbmap -layout us,el
+setxkbmap -option "grp:win_space_toggle"
+setxkbmap -option compose:menu
+

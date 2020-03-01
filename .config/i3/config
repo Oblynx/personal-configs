@@ -30,7 +30,7 @@ font pango:DejaVu Sans Mono 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec gnome-terminal #i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -155,35 +155,51 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3status
-#	tray_output DP-2
+#	tray_output eDP-1
 #	tray_output HDMI-1
 }
 
 
 ###    CUSTOM    ###
-workspace 1 output DP-2
-workspace 3 output DP-2
-workspace 5 output DP-2
-workspace 7 output DP-2
-workspace 9 output DP-2
-workspace 2 output HDMI-1
-workspace 4 output HDMI-1
-workspace 6 output HDMI-1
-workspace 8 output HDMI-1
-workspace 10 output HDMI-1
-#exec_always '/home/oblivion/.local/bin/xrandr_setupMonitor2'
-exec --no-startup-id xrandr --output HDMI-1 --auto --right-of DP-2 --rotate left
+workspace 1 output eDP-1
+workspace 3 output eDP-1
+workspace 5 output eDP-1
+workspace 7 output eDP-1
+workspace 9 output eDP-1
+workspace 2 output DP-3
+workspace 4 output DP-3
+workspace 6 output DP-3
+workspace 8 output DP-3
+workspace 10 output DP-3
 hide_edge_borders smart
 #focus_display_urgency_hint 500 ms
+#exec xrandr --output eDP-1 --mode 1920x1080
+exec_always --no-startup-id autoxrandr
+
+focus_wrapping no
 
 # Custom hotkeys
 # Split terminals
-bindsym Ctrl+Shift+e [class="(?i)*term*"] split h, exec i3-sensible-terminal
-bindsym Ctrl+Shift+o [class="(?i)*term*"] split v, exec i3-sensible-terminal
+bindsym Ctrl+Shift+e [class="(?i)*term*"] split h, exec gnome-terminal
+bindsym Ctrl+Shift+o [class="(?i)*term*"] split v, exec gnome-terminal
 # Volume control
-bindsym $mod+F12 exec --no-startup-id pactl set-sink-volume $(pa_sink_idx) +10% && pactl set-sink-mute 0 0 && killall -SIGUSR1 i3status
-bindsym $mod+F11 exec --no-startup-id pactl set-sink-volume $(pa_sink_idx) -10% && pactl set-sink-mute 0 0 && killall -SIGUSR1 i3status
-bindsym $mod+F10 exec --no-startup-id pactl set-sink-mute $(pa_sink_idx) toggle && killall -SIGUSR1 i3status
+bindsym $mod+F3 exec --no-startup-id pactl set-sink-volume $(pa_sink_idx) +10% && pactl set-sink-mute 0 0 && killall -SIGUSR1 i3status
+bindsym $mod+F2 exec --no-startup-id pactl set-sink-volume $(pa_sink_idx) -10% && pactl set-sink-mute 0 0 && killall -SIGUSR1 i3status
+bindsym $mod+F1 exec --no-startup-id pactl set-sink-mute $(pa_sink_idx) toggle && killall -SIGUSR1 i3status
+# Brightness control
+bindsym $mod+F11 exec --no-statup-id /usr/local/bin/brightctl -1
+bindsym $mod+F12 exec --no-statup-id /usr/local/bin/brightctl 1
+bindsym $mod+XF86MonBrightnessDown exec --no-statup-id /usr/local/bin/brightctl -1
+bindsym $mod+XF86MonBrightnessUp exec --no-statup-id /usr/local/bin/brightctl 1
+bindsym XF86MonBrightnessDown exec --no-statup-id /usr/local/bin/brightctl -1
+bindsym XF86MonBrightnessUp exec --no-statup-id /usr/local/bin/brightctl 1
+
+# touchpad tapping, scrolling
+exec_always --no-startup-id xinput --set-prop "SYNA2393:00 06CB:7A13 Touchpad" "libinput Tapping Enabled" 1
+exec_always --no-startup-id xinput --set-prop "SYNA2393:00 06CB:7A13 Touchpad" "libinput Natural Scrolling Enabled" 1
+exec_always --no-startup-id xinput --set-prop "SYNA2393:00 06CB:7A13 Touchpad" "libinput Accel Speed" 0.5
+exec_always --no-startup-id xinput --set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
+exec_always --no-startup-id xinput --set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
 
 # lock
 set $lock_color 2f343f
@@ -191,13 +207,14 @@ bindsym Ctrl+Mod1+l exec i3lock -c $lock_color -n
 bindsym Ctrl+Mod1+BackSpace exec "i3-msg exit"
 
 # Attempt tearfree
-exec compton --backend glx --vsync opengl-swc
-#exec compton --backend glx --vsync opengl
-#exec compton --backend glx --vsync xrender
+#exec compton --backend glx --glx-no-stencil --glx-use-copysubbuffermesa #--xrender-sync --vsync opengl-swc
 # Keyboard repeat rate
-exec xset r rate 330 50
-#exec_always setxkbmap -layout us,el
-#exec_always setxkbmap -option 'grp:alt_shift_toggle'
+exec_always --no-startup-id xset r rate 330 50
+
+#exec_always --no-startup-id setxkbmap -layout us,el
+exec_always --no-startup-id setxkbmap -option "grp:win_space_toggle"
+exec_always --no-startup-id setxkbmap -option compose:menu
+exec_always --no-startup-id setkb_el
 
 # Screenshot
 # scrot & gimp - root
@@ -215,8 +232,3 @@ bindsym Mod1+Shift+Tab move to scratchpad
 #bindsym $mod+Shift+d [instance="^scratchpad$"] scratchpad show
 #exec_always flock -w1 ~/.config/i3/scratchpad/lockfile ~/.config/i3/scratchpad/perpetual_terminal.sh
 #for_window [instance="^scratchpad$"] move scratchpad
-  
-
-###   AUTOSTART   ###
-#exec vboxmanage startvm devstack16 --type headless
-

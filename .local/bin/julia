@@ -1,0 +1,10 @@
+#!/bin/bash
+tty -s && termflag="t" || termflag=""
+
+podman run -v "$HOME/.julia:$HOME/.julia:z" \
+           -v "$HOME/.atom:$HOME/.atom:z" \
+           -v "$HOME/ws:$HOME/ws:z" \
+           -e="HOME" -e="PWD" \
+           --userns=host --network=host \
+           --rm \
+           "-i$termflag" "docker.io/library/julia:latest" "julia" "$@"

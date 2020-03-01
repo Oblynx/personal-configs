@@ -1,0 +1,19 @@
+#!/bin/bash
+
+falseInput () {
+  echo "  nightlight [enable|disable]: change gnome night light setting"
+  exit 1
+}
+
+nightLightState="$1"
+if [[ "$nightLightState" == "enable" ]]; then
+  nightLightState="true"
+elif [[ "$nightLightState" == "disable" ]]; then
+  nightLightState="false"
+fi
+if [[ "$nightLightState" != "true" && "$nightLightState" != "false" ]]; then
+  falseInput
+fi
+
+echo "nightLightState: '$nightLightState'"
+gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled "$nightLightState"

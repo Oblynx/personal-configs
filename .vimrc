@@ -57,6 +57,7 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'honza/vim-snippets'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'JuliaEditorSupport/julia-vim'
+Plugin 'jpalardy/vim-slime'
 call vundle#end()
 filetype plugin indent on
 set foldmethod=indent
@@ -421,3 +422,16 @@ function! VisualSelection(direction, extra_filter) range
 endfunction
 
 set pastetoggle=<F2>
+
+
+
+"""""""""""""""""""""
+" => CUSTOM
+"""""""""""""""""""""
+:command! -complete=file -nargs=1 Rpdf :r !pdftotext -nopgbrk <q-args> -
+
+filetype plugin indent on
+syntax on
+autocmd FileType python nnoremap <buffer> <F9> :exec '!python3' shellescape(@%, 1)<cr>
+autocmd FileType python nnoremap <buffer> <F8> :exec '!python' shellescape(@%, 1)<cr>
+autocmd FileType julia nnoremap <buffer> <F9> :exec '!julia' shellescape(@%, 1)<cr>
