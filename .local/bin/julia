@@ -1,10 +1,17 @@
 #!/bin/bash
 tty -s && termflag="t" || termflag=""
 
+subuid=$(cat /etc/subuid | cut -d: -f2)
+subgid=$(cat /etc/subgid | cut -d: -f2)
 podman run -v "$HOME/.julia:$HOME/.julia:z" \
            -v "$HOME/.atom:$HOME/.atom:z" \
            -v "$HOME/ws:$HOME/ws:z" \
            -e="HOME" -e="PWD" \
-           --userns=host --network=host \
+           -u=0 --uidmap "0:0:1" --gidmap "0:0:1" \
+           --uidmap "1:1:65535" --gidmap "1:1:65535" \
+           --uidmap "200000:65536:100000" --gidmap "200000:65536:100000" \
+           --network=host \
            --rm \
            "-i$termflag" "docker.io/library/julia:latest" "julia" "$@"
+           #--uidmap "1:1:165535" --gidmap "1:1:165535" \
+           #--uidmap "100000:$subuid:163500" --gidmap "100000:$subgid:163500" \
