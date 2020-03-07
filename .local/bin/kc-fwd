@@ -1,0 +1,19 @@
+# kc-fwd <KUBECONFIG_FILE>
+originalKubeconfig=$(readlink -f "$1")
+clusterDir="$(dirname $originalKubeconfig)"
+fwdKubeconfig="${originalKubeconfig}-fwd"
+APISERVER_LOCALPORT=${2:-9543}
+
+makeFwdKubeconfig(){(
+  cd "$clusterDir"
+  cp "$originalKubeconfig" "$fwdKubeconfig"
+  sed -i "s/server:.*\$/server: https:\/\/127.0.0.1:${APISERVER_LOCALPORT}/" "$fwdKubeconfig"
+)}
+originalApiserver(){
+  grep -e "server:" "$originalKubeconfig" | sed -n 's/.*https:\/\/\(.*\)$/\1/p'
+}
+
+makeFwdKubeconfig
+export KUBECONFIG="$fwdKubeconfig"
+APISERVER=$(originalApiserver)
+ssh -Nnf -L "$APISERVER_LOCALPORT:$APISERVER" lxplus
