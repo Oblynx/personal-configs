@@ -1,18 +1,38 @@
 #!/bin/bash
-
 # Needs sudo
+# Forward an HTTP API through a CERN lxplus tunnel
 
-authzapidev_name="authorization-service-api-dev.web.cern.ch"
-authzapidev_fwdIP='173.148.52.184'
-authzapidev_localport=20156
-kcdev_name="keycloak-dev.cern.ch"
-kcdev_fwdIP='173.148.52.185'
-kcdev_localport=20157
+# Parameters
+base_fwdIP='173.148.52.0'
+fwdIP_file='/tmp/fwdIPs'
+base_localport=20156
+localport_file='/tmp/fwdLocalports'
 
+# Given a fwdIP, produce the next one
+next_fwdIP() {
+  echo "$(echo $1| cut -d. -f-3).$(( $(echo $1| cut -d. -f4)+1 ))"
+}
+# Produce the last used fwdIP
+lastFwdIP() {
+  [[ -f "$fwdIP_file" ]] && ip=$(tail -n1 "$fwdIP_file")
+  [[ -z "$ip" ]] && ip=$base_fwdIP
+  echo "$ip"
+}
+# Produce the last used localport
+lastLocalport() {
+  [[ -f "$localport_file" ]] && port=$(tail -n1 "$localport_file")
+  [[ -z "$port" ]] && port=$base_localport
+  echo "$port"
+}
+
+# Forward an HTTP API through a local tunnel
 fwd_api() {
   name="$1"
-  fwdIP="$2"
-  localport="$3"
+
+  fwdIP=$(next_fwdIP $(lastFwdIP))
+  echo "$fwdIP" >> "$fwdIP_file"
+  localport=$(( $(lastLocalport)+1 ))
+  echo "$localport" >> "$localport_file"
 
   #1. /etc/hosts DNS alias: `authorization-service-api-dev.web.cern.ch -> <random IP X>`
   sudo bash -c "echo \"$fwdIP $name\" >> /etc/hosts"
@@ -22,5 +42,10 @@ fwd_api() {
   ssh -NnfL "$localport:$name:443" lxplus
 }
 
-fwd_api "$authzapidev_name" "$authzapidev_fwdIP" "$authzapidev_localport"
-fwd_api "$kcdev_name" "$kcdev_fwdIP" "$kcdev_localport"
+usage() {
+  echo "Usage: $0 <hostname-to-fwd>"
+  echo "eg: $0 registry.cern.ch"
+  exit 1
+}
+
+[[ -z "$1" ]] && fwd_api "$1" || usage
