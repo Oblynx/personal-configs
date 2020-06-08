@@ -1,10 +1,12 @@
 # Forward a Kubernetes API server to a local port over an ssh proxy
 # Use: 
-# $ source kc-fwd <KUBECONFIG_FILE>
+# $ source kc-fwd <KUBECONFIG_FILE> [localport]
 # $ kubectl get pod
 # ...
 
-[ -z "$1" ] || {
+[ -z "$1" ] && {
+  echo "Usage: . kc-fwd <KUBECONFIG_FILE> [localport]"
+} || {
   originalKubeconfig=$(readlink -f "$1")
   clusterDir="$(dirname $originalKubeconfig)"
   fwdKubeconfig="${originalKubeconfig}-fwd"
@@ -18,10 +20,17 @@
   originalApiserver(){
     grep -e "server:" "$originalKubeconfig" | sed -n 's/.*https:\/\/\(.*\)$/\1/p'
   }
+  isIP(){
+    [[ "$1" =~ ^([0-9]+\.){3}[0-9]+:?[0-9]*$ ]]
+  }
 
-  makeFwdKubeconfig
-  export KUBECONFIG="$fwdKubeconfig"
   APISERVER=$(originalApiserver)
-  fuser -k "${APISERVER_LOCALPORT}/tcp"
-  ssh -Nnf -L "$APISERVER_LOCALPORT:$APISERVER" lxplus
+  $(isIP $APISERVER) && {
+    makeFwdKubeconfig
+    export KUBECONFIG="$fwdKubeconfig"
+    fuser -k "${APISERVER_LOCALPORT}/tcp"
+    ssh -Nnf -L "$APISERVER_LOCALPORT:$APISERVER" lxplus
+  } || {
+    fwd_api_outside_cern.sh "$APISERVER"
+  }
 }
