@@ -49,9 +49,11 @@ usage() {
   exit 1
 }
 
+[[ -z "$1" ]] && usage
+
 # If we are given a hostname with a port, reuse that port. Otherwise, default port to 443
 hostname=$(echo $1 | cut -d: -f1)
 port=$(echo $1 | cut -s -d: -f2)
 port=${port:-443}
 
-[[ -z "$1" ]] && fwd_api "$hostname" "$port" || usage
+fwd_api "$hostname" "$port"

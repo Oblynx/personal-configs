@@ -31,6 +31,7 @@
     fuser -k "${APISERVER_LOCALPORT}/tcp"
     ssh -Nnf -L "$APISERVER_LOCALPORT:$APISERVER" lxplus
   } || {
+    export KUBECONFIG="$originalKubeconfig"
     fwd_api_outside_cern.sh "$APISERVER"
   }
 }
