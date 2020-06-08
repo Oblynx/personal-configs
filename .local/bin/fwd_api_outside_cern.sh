@@ -27,7 +27,8 @@ lastLocalport() {
 
 # Forward an HTTP API through a local tunnel
 fwd_api() {
-  name="$1"
+  hostname="$1"
+  port="$2"
 
   fwdIP=$(next_fwdIP $(lastFwdIP))
   echo "$fwdIP" >> "$fwdIP_file"
@@ -35,11 +36,11 @@ fwd_api() {
   echo "$localport" >> "$localport_file"
 
   #1. /etc/hosts DNS alias: `authorization-service-api-dev.web.cern.ch -> <random IP X>`
-  sudo bash -c "echo \"$fwdIP $name\" >> /etc/hosts"
+  sudo bash -c "echo \"$fwdIP $hostname\" >> /etc/hosts"
   #2. iptables fwd: `X:443 -> localhost:20500`
-  sudo iptables -t nat -I OUTPUT --dst "$fwdIP" -p tcp --dport 443 -j REDIRECT --to-ports "$localport"
+  sudo iptables -t nat -I OUTPUT --dst "$fwdIP" -p tcp --dport "$port" -j REDIRECT --to-ports "$localport"
   #3. ssh -L: `localhost:20500 -> authorization-service-api-dev.web.cern.ch:443` over lxplus
-  ssh -NnfL "$localport:$name:443" lxplus
+  ssh -NnfL "$localport:$hostname:$port" lxplus
 }
 
 usage() {
@@ -48,4 +49,9 @@ usage() {
   exit 1
 }
 
-[[ -z "$1" ]] && fwd_api "$1" || usage
+# If we are given a hostname with a port, reuse that port. Otherwise, default port to 443
+hostname=$(echo $1 | cut -d: -f1)
+port=$(echo $1 | cut -s -d: -f2)
+port=${port:-443}
+
+[[ -z "$1" ]] && fwd_api "$hostname" "$port" || usage
