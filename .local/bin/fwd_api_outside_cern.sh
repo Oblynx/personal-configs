@@ -56,4 +56,6 @@ hostname=$(echo $1 | cut -d: -f1)
 port=$(echo $1 | cut -s -d: -f2)
 port=${port:-443}
 
-fwd_api "$hostname" "$port"
+# If we can already make https requests, there is nothing more to do
+curl -m3 --insecure "https://${hostname}:${port}" &> /dev/null ||
+  fwd_api "$hostname" "$port"
