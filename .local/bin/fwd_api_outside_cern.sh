@@ -10,7 +10,9 @@ localport_file='/tmp/fwdLocalports'
 
 # Given a fwdIP, produce the next one
 next_fwdIP() {
-  echo "$(echo $1| cut -d. -f-3).$(( $(echo $1| cut -d. -f4)+1 ))"
+  nextIP=$(echo $1| cut -d. -f-3).$(( $(echo $1| cut -d. -f4)+1 ))
+  echo "$nextIP" >> "$fwdIP_file"
+  echo "$nextIP"
 }
 # Produce the last used fwdIP
 lastFwdIP() {
@@ -25,13 +27,24 @@ lastLocalport() {
   echo "$port"
 }
 
+pick_fwdIP() {
+  hostname="$1"
+  lastFwdIP="$2"
+
+  existingFwdIP=$(grep -he $hostname /etc/hosts | head -n1 | cut -d' ' -f1)
+  [[ -z $existingFwdIP ]] && {
+    echo $(next_fwdIP $lastFwdIP)
+  } || {
+    echo $existingFwdIP
+  }
+}
+
 # Forward an HTTP API through a local tunnel
 fwd_api() {
   hostname="$1"
   port="$2"
 
-  fwdIP=$(next_fwdIP $(lastFwdIP))
-  echo "$fwdIP" >> "$fwdIP_file"
+  fwdIP=$(pick_fwdIP $hostname $(lastFwdIP))
   localport=$(( $(lastLocalport)+1 ))
   echo "$localport" >> "$localport_file"
 
