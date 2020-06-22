@@ -22,9 +22,9 @@ lastFwdIP() {
 }
 # Produce the last used localport
 lastLocalport() {
-  [[ -f "$localport_file" ]] && port=$(tail -n1 "$localport_file")
-  [[ "$port" < "$base_localport" ]] && port="$base_localport"
-  echo "$port"
+  [[ -f "$localport_file" ]] && localport=$(tail -n1 "$localport_file")
+  [[ "$localport" < "$base_localport" ]] && localport="$base_localport"
+  echo "$localport"
 }
 
 # Forward an HTTP API through a local tunnel
