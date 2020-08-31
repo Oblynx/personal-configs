@@ -2,7 +2,7 @@
 
 # Authz API dev
 authzapidev_name="authorization-service-api-dev.web.cern.ch"
-# Keycloak dev
+# Keycloak
 kcdev_name="keycloak-dev.cern.ch"
 # CERN helm chart registry
 registry_name="registry.cern.ch"
