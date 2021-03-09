@@ -130,4 +130,12 @@ source <(kubectl completion bash)
 complete -F __start_kubectl kc
 complete -F __start_kubectl oc
 
-export PATH="/home/oblivion/tmp/fomu-toolchain-linux_x86_64-v1.5.3/bin:$PATH"
+export PATH=~/go/bin:$PATH
+export GO111MODULE=on
+export GOROOT="/usr/lib/golang"
+export EDITOR=vim
+export VISUAL=$EDITOR
+export ZOOM_HOME=$HOME/.zoom
+# Protect PROD clusters by always requiring an explicit KUBECONFIG assignment before accessing
+# KUBECONFIG needs to be set before `kc login`
+export KUBECONFIG=/tmp

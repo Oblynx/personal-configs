@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Authz API dev
-authzapidev_name="authorization-service-api-dev.web.cern.ch"
+# Authz API QA
+authzapiqa_name="authorization-service-api-qa.web.cern.ch"
 # Keycloak
-kcdev_name="keycloak-dev.cern.ch"
+kcqa_name="keycloak-qa.cern.ch"
 # CERN helm chart registry
 registry_name="registry.cern.ch"
 
-fwd_api_outside_cern.sh "$authzapidev_name"
-fwd_api_outside_cern.sh "$kcdev_name"
+fwd_api_outside_cern.sh "$authzapiqa_name"
+fwd_api_outside_cern.sh "$kcqa_name"
 fwd_api_outside_cern.sh "$registry_name"

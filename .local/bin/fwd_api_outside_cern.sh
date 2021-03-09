@@ -1,6 +1,6 @@
 #!/bin/bash
 # Needs sudo
-# Forward an HTTP API through a CERN lxplus tunnel
+# Forward an HTTP API through a CERN lxtunnel tunnel
 
 # Parameters
 base_fwdIP='173.148.52.0'
@@ -44,8 +44,8 @@ fwd_api() {
 
   #2. iptables fwd: `X:443 -> localhost:20500`
   sudo iptables -t nat -I OUTPUT --dst "$fwdIP" -p tcp --dport "$port" -j REDIRECT --to-ports "$localport"
-  #3. ssh -L: `localhost:20500 -> authorization-service-api-dev.web.cern.ch:443` over lxplus
-  ssh -NnfL "$localport:$hostname:$port" lxplus
+  #3. ssh -L: `localhost:20500 -> authorization-service-api-dev.web.cern.ch:443` over lxtunnel
+  ssh -NnfL "$localport:$hostname:$port" lxtunnel
 }
 
 usage() {

@@ -29,7 +29,7 @@
     makeFwdKubeconfig
     export KUBECONFIG="$fwdKubeconfig"
     fuser -k "${APISERVER_LOCALPORT}/tcp"
-    ssh -Nnf -L "$APISERVER_LOCALPORT:$APISERVER" lxplus
+    ssh -Nnf -L "$APISERVER_LOCALPORT:$APISERVER" lxtunnel
   } || {
     export KUBECONFIG="$originalKubeconfig"
     fwd_api_outside_cern.sh "$APISERVER"
