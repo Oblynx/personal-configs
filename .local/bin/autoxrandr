@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# 1. Ensure high DPI settings to accommodate 4k integrated display (doesn't work due to permissions!)
+highDPI=$(grep -qe 'Xft.dpi: 192' /etc/X11/Xresources)
+if [[ ! "$highDPI" ]]; then
+  sed -i 's/Xft\.dpi.*/Xft.dpi: 192/' /etc/X11/Xresources
+fi
+
+# 2. Set screen with xrandr
+
+# Find which output is the laptop's integrated screen
+for output in $(xrandr | grep '\Wconnected' | awk '{ print $1 }'); do
+  if [[ "$output" =~ ^eDP.*$ ]]; then
+    laptop_integrated_screen="$output"
+  fi
+done
+
+# If there's an external monitor, configure with xrandr
+
+# Since the laptop integrated monitor is 4k, the DPI setting is double normal (192) system-wide
+# This will cause huge fonts on 1080p displays. Such displays should be scaled x2.
+# The scale factor is set statically, but it should be possible to 
+scale_factor="2x2"
+
+external_monitor=0
+for output in $(xrandr | grep '\Wconnected' | awk '{ print $1 }'); do
+  if [[ ! "$output" =~ ^eDP.*$ ]]; then
+    external_monitor=1
+    xrandr --output "$laptop_integrated_screen" --auto \
+           --output "$output" --auto --scale "$scale_factor" \
+           --pos 0x0 --right-of "$laptop_integrated_screen" --primary
+  fi
+done
+
+# If lid closed, xrandr off integrated screen
+lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $2;}')
+if [ "$lid_state" == "closed" ]; then
+  xrandr --output "$laptop_integrated_screen" --off
+fi
