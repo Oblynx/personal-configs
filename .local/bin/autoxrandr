@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # 1. Ensure high DPI settings to accommodate 4k integrated display (doesn't work due to permissions!)
-highDPI=$(grep -qe 'Xft.dpi: 192' /etc/X11/Xresources)
-if [[ ! "$highDPI" ]]; then
+grep -qe 'Xft.dpi: 192' /etc/X11/Xresources || {
   sed -i 's/Xft\.dpi.*/Xft.dpi: 192/' /etc/X11/Xresources
-fi
+}
 
 # 2. Set screen with xrandr
 
@@ -31,6 +30,11 @@ for output in $(xrandr | grep '\Wconnected' | awk '{ print $1 }'); do
            --pos 0x0 --right-of "$laptop_integrated_screen" --primary
   fi
 done
+
+if [[ "$external_monitor" == 0 ]]; then
+  # Restore xrandr for only integrated screen
+  xrandr --output "$laptop_integrated_screen" --auto --primary
+fi
 
 # If lid closed, xrandr off integrated screen
 lid_state=$(cat /proc/acpi/button/lid/LID0/state | awk '{print $2;}')

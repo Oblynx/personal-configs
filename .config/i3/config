@@ -173,7 +173,6 @@ workspace 8 output DP-3
 workspace 10 output DP-3
 hide_edge_borders smart
 #focus_display_urgency_hint 500 ms
-#exec xrandr --output eDP-1 --mode 1920x1080
 exec_always --no-startup-id autoxrandr
 
 focus_wrapping no
@@ -187,12 +186,12 @@ bindsym $mod+F3 exec --no-startup-id pactl set-sink-volume $(pa_sink_idx) +10% &
 bindsym $mod+F2 exec --no-startup-id pactl set-sink-volume $(pa_sink_idx) -10% && pactl set-sink-mute 0 0 && killall -SIGUSR1 i3status
 bindsym $mod+F1 exec --no-startup-id pactl set-sink-mute $(pa_sink_idx) toggle && killall -SIGUSR1 i3status
 # Brightness control
-bindsym $mod+F11 exec --no-statup-id /usr/local/bin/brightctl -1
-bindsym $mod+F12 exec --no-statup-id /usr/local/bin/brightctl 1
-bindsym $mod+XF86MonBrightnessDown exec --no-statup-id /usr/local/bin/brightctl -1
-bindsym $mod+XF86MonBrightnessUp exec --no-statup-id /usr/local/bin/brightctl 1
-bindsym XF86MonBrightnessDown exec --no-statup-id /usr/local/bin/brightctl -1
-bindsym XF86MonBrightnessUp exec --no-statup-id /usr/local/bin/brightctl 1
+bindsym $mod+F11 exec --no-statup-id bash -c '/home/oblivion/.local/bin/brightctl -1'
+bindsym $mod+F12 exec --no-statup-id bash -c '/home/oblivion/.local/bin/brightctl 1'
+bindsym $mod+XF86MonBrightnessDown exec --no-statup-id bash -c '/home/oblivion/.local/bin/brightctl -1'
+bindsym $mod+XF86MonBrightnessUp exec --no-statup-id bash -c '/home/oblivion/.local/bin/brightctl 1'
+bindsym XF86MonBrightnessDown exec --no-statup-id bash -c '/home/oblivion/.local/bin/brightctl -1'
+bindsym XF86MonBrightnessUp exec --no-statup-id bash -c '/home/oblivion/.local/bin/brightctl 1'
 
 # touchpad tapping, scrolling
 exec_always --no-startup-id xinput --set-prop "SYNA2393:00 06CB:7A13 Touchpad" "libinput Tapping Enabled" 1
