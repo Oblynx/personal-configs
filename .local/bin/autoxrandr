@@ -22,13 +22,17 @@ done
 scale_factor="2x2"
 
 external_monitor=0
-for output in $(xrandr | grep '\Wconnected' | awk '{ print $1 }'); do
-  if [[ ! "$output" =~ ^eDP.*$ ]]; then
-    external_monitor=1
-    xrandr --output "$laptop_integrated_screen" --auto \
-           --output "$output" --auto --scale "$scale_factor" \
-           --pos 0x0 --right-of "$laptop_integrated_screen" --primary
-  fi
+for output in $(xrandr | grep 'connected' | awk '{ print $1 }'); do
+  # Every output can first be set to auto. Disconnected outputs will be reset.
+  xrandr --output "$output" --auto
+  # For connected outputs, find the external screen
+  xrandr | grep "$output" | grep -q '\Wconnected' && {
+    if [[ ! "$output" =~ ^eDP.*$ ]]; then
+      external_monitor=1
+      xrandr --output "$output" --auto --scale "$scale_factor" \
+             --pos 0x0 --right-of "$laptop_integrated_screen" --primary
+    fi
+  }
 done
 
 if [[ "$external_monitor" == 0 ]]; then
