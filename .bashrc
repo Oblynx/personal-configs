@@ -16,8 +16,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=2000
+HISTFILESIZE=4000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -92,8 +92,6 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-alias docker='podman'
-
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -125,10 +123,18 @@ export PATH=~/.local/bin:$PATH
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib64/python2.7/site-packages/
 export ATOM_DEV_RESOURCE_PATH=~/ws/var/atom
 export ELECTRON_TRASH=gio
-alias kc=kubectl
-source <(kubectl completion bash)
+alias kc="snap run kubectl"
+source <(kc completion bash)
 complete -F __start_kubectl kc
-complete -F __start_kubectl oc
+#complete -F __start_kubectl oc
+
+# Microk8s: if active, load completion
+if [[ $(systemctl list-units "*microk8s.daemon*" | grep ' active ' | wc -l) > 0 ]]; then
+  alias mkc="microk8s kubectl"
+  alias mhelm="microk8s helm3"
+  source <(mkc completion bash)
+  complete -F __start_kubectl mkc
+fi
 
 export PATH=~/go/bin:$PATH
 export GO111MODULE=on
@@ -136,6 +142,7 @@ export GOROOT="/usr/lib/golang"
 export EDITOR=vim
 export VISUAL=$EDITOR
 export ZOOM_HOME=$HOME/.zoom
+
 # Protect PROD clusters by always requiring an explicit KUBECONFIG assignment before accessing
 # KUBECONFIG needs to be set before `kc login`
 export KUBECONFIG=/tmp
