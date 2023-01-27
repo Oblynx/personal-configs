@@ -57,16 +57,16 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    _PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    _PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w'
 fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    _PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]${_PS1}"
     ;;
 *)
     ;;
@@ -116,6 +116,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
+PS1="${_PS1}\$ "
 
 ###   CUSTOM   ###
 # Add to path
@@ -146,3 +147,7 @@ export ZOOM_HOME=$HOME/.zoom
 # Protect PROD clusters by always requiring an explicit KUBECONFIG assignment before accessing
 # KUBECONFIG needs to be set before `kc login`
 export KUBECONFIG=/tmp
+
+# Load custom kubectl prompt
+KUBE_PS1_NS_ENABLE=false
+. ~/ws/var/personal_confs/kube-ps1.sh
