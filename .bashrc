@@ -143,6 +143,7 @@ export GOROOT="/usr/lib/golang"
 export EDITOR=vim
 export VISUAL=$EDITOR
 export ZOOM_HOME=$HOME/.zoom
+export AWS_DEFAULT_REGION=eu-central-1
 
 # Protect PROD clusters by always requiring an explicit KUBECONFIG assignment before accessing
 # KUBECONFIG needs to be set before `kc login`

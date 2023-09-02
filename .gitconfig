@@ -1,0 +1,16 @@
+[user]
+	name = Konstantinos Samaras-Tsakiris
+	email = ksamtsak@gmail.com
+[http]
+	emptyAuth = true
+[pull]
+	ff = only
+[push]
+  autoSetupRemote = true
+[credential]
+  helper = store --file XXX
+  helper = cache --timeout=7200
+[init]
+	defaultBranch = main
+[includeIf "gitdir:~/ws/orig/idun/"]
+  path = .gitconfig-idun

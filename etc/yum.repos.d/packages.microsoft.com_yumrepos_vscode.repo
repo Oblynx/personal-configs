@@ -1,0 +1,4 @@
+[packages.microsoft.com_yumrepos_vscode]
+name=Microsoft VScode
+baseurl=https://packages.microsoft.com/yumrepos/vscode
+enabled=1

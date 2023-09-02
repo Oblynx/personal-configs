@@ -53,7 +53,6 @@ Plugin 'rodjek/vim-puppet'
 Plugin 'godlygeek/tabular'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
 Plugin 'honza/vim-snippets'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'JuliaEditorSupport/julia-vim'
@@ -333,7 +332,7 @@ fun! CleanExtraSpaces()
 endfun
 
 if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.php :call CleanExtraSpaces()
 endif
 
 
@@ -435,3 +434,18 @@ syntax on
 autocmd FileType python nnoremap <buffer> <F9> :exec '!python3' shellescape(@%, 1)<cr>
 autocmd FileType python nnoremap <buffer> <F8> :exec '!python' shellescape(@%, 1)<cr>
 autocmd FileType julia nnoremap <buffer> <F9> :exec '!julia' shellescape(@%, 1)<cr>
+autocmd FileType c,cpp,python,ruby,java,markdown,md autocmd BufWritePre <buffer> :%s/\s\+$//e
+
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+function! TrimWhiteSpace()
+    %s/\s\+$//e
+endfunction
+autocmd BufWritePre     *.yaml :call TrimWhiteSpace()
+

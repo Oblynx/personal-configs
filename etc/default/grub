@@ -1,0 +1,9 @@
+GRUB_TIMEOUT=3
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_DEFAULT="Windows Boot Manager (on /dev/nvme0n1p1)"
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="rd.luks.uuid=luks-94634b22-2e4a-4279-8bd0-db99d9c7924f rhgb quiet video=1920x1080 nouveau.modeset=0 snd_hda_intel.power_save=0 snd_hda_intel.power_save_controller=N"
+GRUB_DISABLE_RECOVERY="false"
+GRUB_GFXMODE=1920x1080
+GRUB_ENABLE_BLSCFG=true
