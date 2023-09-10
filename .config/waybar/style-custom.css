@@ -1,0 +1,131 @@
+* {
+  font-family: "Cantarell";
+  font-size: 11px;
+}
+
+
+window#waybar { 
+  background-color: #225877; 
+  color: #ffffff;    
+}
+
+
+.modules-left {
+  background-color: #323232;
+  padding: 0px 0px 0px 0px;
+}
+
+
+.modules-right {
+  background-color: #323232;
+  padding: 0px 2px 0px 0px;
+}
+
+
+#custom-scratch {
+  background-color: #323232;
+  color: #b8b8b8;
+  padding: 0px 9px 0px 9px;
+}
+
+
+#workspaces {
+}
+
+
+#workspaces button {
+  padding: 0px 5px 0px 5px; 
+  min-width: 3px;
+  color: #888888;
+}
+
+
+#workspaces button.focused { 
+  padding: 0px 8px 0px 8px; 
+  background-color: #285577;
+  color: #ffffff;
+}
+
+#workspaces button.urgent {
+  padding: 0px 8px 0px 8px;
+  background-color: #990000;
+  color: #e6e6e6;
+}
+
+
+#mode { 
+  background-color: #900000;
+  color: #ffffff;
+  padding: 0px 5px 0px 5px;
+  border: 1px solid #2f343a;
+}
+
+#language {
+  font-size: 13;
+  padding: 0px 2px 0px 2px;
+}
+
+#window {
+  color: #ffffff;
+  background-color: #285577;
+  padding: 0px 8px 0px 8px;
+  margin: 0px 0px 0px 1px;
+}
+
+
+window#waybar.empty #window {
+  background-color: transparent;
+  color: transparent;
+}
+
+
+window#waybar.empty {
+  background-color: #323232;
+}
+
+
+#network, #disk, #temperature, #cpu, #memory, #backlight, #bluetooth, #pulseudio, #battery {
+  padding: 0px 6px 0px 6px;
+}
+
+#disk.warning {
+  color: #cca300;
+}
+
+#pulseaudio {
+  padding: 0px 2px 0px 4px;
+}
+
+#pulseaudio.muted {
+  color: #cca300;
+}
+
+#pulseaudio.source-muted {
+  color: #cca300;
+}
+
+#clock {
+  margin: 0px 10px 0px 10px;
+}
+
+
+#tray{
+  padding: 0px 8px 0px 5px;
+  margin: 0px 5px 0px 5px;
+}
+
+#battery.warning{
+  color: #cca300;
+}
+
+#battery.critical {
+  color: #ff5555;
+}
+
+
+#network.disconnected {
+  color: #ff5555;
+}
+
+
+

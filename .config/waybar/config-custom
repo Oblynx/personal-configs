@@ -1,0 +1,193 @@
+// This config is a customization of the main source, mixed with default settings and personal prefs
+// Source: https://github.com/chaibronz/waybar_conf/blob/main/config_sway
+{
+  "id": "bar-0",
+  "ipc": true,
+  "layer": "top",
+  "position": "bottom",
+  //"height": 12,
+  "modules-left": [
+    "sway/workspaces",
+    "sway/mode",
+    "sway/window"
+  ],
+  "modules-center": [],
+  "modules-right": [
+    "mpd",
+    "network",
+    "disk",
+    "temperature",
+    "cpu",
+    "memory",
+    "bluetooth",
+    "pulseaudio",
+    "battery",
+    "sway/language",
+    "clock",
+    "tray"
+  ],
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "format": "{index}",
+  },
+  "sway/mode": {
+      "format": "<span style=\"italic\">{}</span>"
+  },
+  "sway/window": {
+    "format": "{}",
+    "max-length": 70
+  },
+  "tray": {
+    "icon-size": 15,
+    "spacing": 7
+  },
+  "clock": {
+    "format": "📆 {:%a %b %e  %T}",
+    "interval": 3,
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode"          : "year",
+      "mode-mon-col"  : 3,
+      "weeks-pos"     : "right",
+      "on-scroll"     : 1,
+      "on-click-right": "mode",
+      "format": {
+        "months":     "<span color='#ffead3'><b>{}</b></span>",
+        "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+        "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions":  {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+  "battery": {
+    "bat": "BAT0",
+    "states": {
+      //"full": 99,
+      //"good": 98,
+      "normal": 98,
+      "warning": 25,
+      "critical": 15
+    },
+    "format": "{icon}  {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{icon} {time}",
+    //"format-good": "{icon} {capacity}%",
+    //"format-full": "  {capacity}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "interval": 15
+  },
+  "network": {
+    "interval": 5,
+    "format-wifi": " {essid} ({signalStrength}%)  ⮃{bandwidthTotalBytes}",
+    "format-ethernet": " {ipaddr}/{cidr}",
+    "tooltip-format": " {ifname} via {gwaddr}, bandwidth: ⭣{bandwidthDownBytes} ⭡{bandwidthUpBytes}",
+    "format-linked": " {ifname} (No IP)",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  },
+  "disk": {
+    "interval": 6,
+    "format": "🖫  {free}",
+    "path": "/"
+    //"states": [
+    //  "critical": 1
+    //]
+  },
+  "cpu": {
+    "format": "🏋️ {load}"
+  },
+  "memory": {
+    "format": "🧠 {percentage}%"
+  },
+  "temperature": {
+    "thermal-zone": 4,
+    "critical-threshold": 60,
+    "interval": 30,
+    "format": "{icon} {temperatureC}°C",
+    "format-icons": [
+      "🌡"
+    ]
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{icon}  {percent}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "interval": 60
+  },
+  "bluetooth": {
+    "format": " {status}",
+    "format-connected": " {device_alias}",
+    "format-connected-battery": " {device_alias} {device_battery_percentage}%",
+    // "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+    "on-click": "blueman-manager"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}% {format_source}",
+    "format-bluetooth": "{icon} {volume}%  {format_source}",
+    //"format-bluetooth": "  {volume}%  {format_source}",
+    "format-bluetooth-muted": "{icon}    {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "🎤 {volume}%",
+    "format-source-muted": "🎤 ",
+    "format-icons": {
+        "headphone": "",
+        "hands-free": "",
+        "headset": "",
+        "phone": "",
+        "portable": "",
+        "car": "",
+        "default": ["🕨", "🕩", "🕪"]
+    },
+    "on-click": "pavucontrol"
+  },
+  "mpd": {
+    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+    "format-disconnected": "Disconnected ",
+    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+    "unknown-tag": "N/A",
+    "interval": 2,
+    "consume-icons": {
+        "on": " "
+    },
+    "random-icons": {
+        "off": "<span color=\"#f53c3c\"></span> ",
+        "on": " "
+    },
+    "repeat-icons": {
+        "on": " "
+    },
+    "single-icons": {
+        "on": "1 "
+    },
+    "state-icons": {
+        "paused": "",
+        "playing": ""
+    },
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)"
+  }
+}

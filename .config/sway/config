@@ -1,0 +1,318 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+# Use arrows for direction keys
+set $left Left
+set $down Down
+set $up Up
+set $right Right
+
+# Your preferred terminal emulator
+set $term gnome-terminal
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+set $menu ulauncher | xargs swaymsg exec --
+
+# Ensure sway commands work with other keyboard layouts
+set $bindsym_code bindsym --to-code
+
+include /etc/sway/config-vars.d/*
+
+### Output configuration
+#
+# Wallpaper
+output * bg /usr/share/backgrounds/winter-is-leaving_by_Gixo-light.png fill
+
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+output * {
+  adaptive_sync on
+  # This command is experimental. Read `man sway-output`
+  # NOTE: some things actually don't work if we change this
+  #render_bit_depth 10
+}
+
+output eDP-1 {
+  # NOTE: fractional scaling causes blurring!
+  scale 2
+}
+
+# TODO: setup clamshell mode https://github.com/swaywm/sway/wiki#clamshell-mode
+
+
+### Idle configuration
+#
+# Example configuration:
+#
+
+exec swayidle -w \
+         timeout 400 'swaylock -Ff -c 000000 --indicator-radius 100' \
+         timeout 430 'swaymsg "output * dpms off"' \
+         resume 'swaymsg "output * dpms on"' \
+         before-sleep 'playerctl pause' \
+         before-sleep 'swaylock -Ff -c 000000 --indicator-radius 100' \
+         after-resume 'swaylock -Ff -c 000000 --indicator-radius 100'
+
+#
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+### Input configuration
+#
+# Example configuration:
+#
+#   input "2:14:SynPS/2_Synaptics_TouchPad" {
+#       dwt enabled
+#       tap enabled
+#       natural_scroll enabled
+#       middle_emulation enabled
+#   }
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+input "type:keyboard" {
+  repeat_delay 330
+  repeat_rate 50
+  xkb_layout "us,gr"
+  xkb_options "grp:win_space_toggle,compose:ralt"
+}
+
+input "type:touchpad" {
+  dwt enabled
+  tap enabled
+  middle_emulation enabled
+  natural_scroll enabled
+  scroll_factor 1
+}
+
+input "1267:11557:ELAN900C:00_04F3:2D25" {
+  map_to_output eDP-1
+}
+
+### Key bindings
+# Special keys:
+# TODO: enable
+$bindsym_code --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.2 @DEFAULT_AUDIO_SINK@ 10%+
+$bindsym_code --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%-
+$bindsym_code --locked --no-repeat XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+$bindsym_code --no-repeat XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+$bindsym_code XF86MonBrightnessUp exec brightnessctl set 10%+
+$bindsym_code XF86MonBrightnessDown exec brightnessctl set 5%-
+$bindsym_code --no-repeat XF86AudioPlay exec playerctl play-pause
+
+#
+# Basics:
+#
+# Start a terminal
+$bindsym_code --no-repeat $mod+Return exec $term
+
+# Kill focused window
+$bindsym_code --no-repeat $mod+Shift+q kill
+
+# Start your launcher
+$bindsym_code --no-repeat $mod+d exec $menu
+
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+# Reload the configuration file
+$bindsym_code --no-repeat $mod+Shift+c reload
+# restart sway inplace (preserves your layout/session, can be used to upgrade)
+$bindsym_code --no-repeat $mod+Shift+r restart
+
+# Exit sway (logs you out of your Wayland session)
+$bindsym_code --no-repeat $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+#
+# Moving around:
+#
+# Move your focus around
+#$bindsym_code $mod+$left focus left
+#$bindsym_code $mod+$down focus down
+#$bindsym_code $mod+$up focus up
+#$bindsym_code $mod+$right focus right
+# Or use $mod+[up|down|left|right]
+$bindsym_code $mod+Left focus left
+$bindsym_code $mod+Down focus down
+$bindsym_code $mod+Up focus up
+$bindsym_code $mod+Right focus right
+
+# Move the focused window with the same, but add Shift
+#$bindsym_code $mod+Shift+$left move left
+#$bindsym_code $mod+Shift+$down move down
+#$bindsym_code $mod+Shift+$up move up
+#$bindsym_code $mod+Shift+$right move right
+# Ditto, with arrow keys
+$bindsym_code $mod+Shift+Left move left
+$bindsym_code $mod+Shift+Down move down
+$bindsym_code $mod+Shift+Up move up
+$bindsym_code $mod+Shift+Right move right
+#
+# Workspaces:
+#
+# TODO: add Sway OVerview: https://github.com/milgra/sov#usage-with-sway-wm
+# Switch to workspace
+$bindsym_code $mod+1 workspace number 1
+$bindsym_code $mod+2 workspace number 2
+$bindsym_code $mod+3 workspace number 3
+$bindsym_code $mod+4 workspace number 4
+$bindsym_code $mod+5 workspace number 5
+$bindsym_code $mod+6 workspace number 6
+$bindsym_code $mod+7 workspace number 7
+$bindsym_code $mod+8 workspace number 8
+$bindsym_code $mod+9 workspace number 9
+$bindsym_code $mod+0 workspace number 10
+# Move focused container to workspace
+$bindsym_code $mod+Shift+1 move container to workspace number 1
+$bindsym_code $mod+Shift+2 move container to workspace number 2
+$bindsym_code $mod+Shift+3 move container to workspace number 3
+$bindsym_code $mod+Shift+4 move container to workspace number 4
+$bindsym_code $mod+Shift+5 move container to workspace number 5
+$bindsym_code $mod+Shift+6 move container to workspace number 6
+$bindsym_code $mod+Shift+7 move container to workspace number 7
+$bindsym_code $mod+Shift+8 move container to workspace number 8
+$bindsym_code $mod+Shift+9 move container to workspace number 9
+$bindsym_code $mod+Shift+0 move container to workspace number 10
+# Note: workspaces can have any name you want, not just numbers.
+# We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+$bindsym_code --no-repeat $mod+h splith
+$bindsym_code --no-repeat $mod+v splitv
+
+# Switch the current container between different layout styles
+#$bindsym_code $mod+s layout stacking
+#$bindsym_code $mod+w layout tabbed
+$bindsym_code --no-repeat $mod+e layout toggle split
+
+# Make the current focus fullscreen
+$bindsym_code --no-repeat $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+$bindsym_code --no-repeat $mod+Shift+tab floating toggle
+
+# Swap focus between the tiling area and the floating area
+$bindsym_code --no-repeat $mod+tab focus mode_toggle
+
+# Move focus to the parent container
+$bindsym_code --no-repeat $mod+a focus parent
+$bindsym_code --no-repeat $mod+Shift+a focus child
+#
+# Scratchpad:
+#
+# Sway has a "scratchpad", which is a bag of holding for windows.
+# You can send windows there and get them back later.
+
+# Move the currently focused window to the scratchpad
+$bindsym_code --no-repeat $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+$bindsym_code --no-repeat $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    #$bindsym_code $left resize shrink width 10px
+    #$bindsym_code $down resize grow height 10px
+    #$bindsym_code $up resize shrink height 10px
+    #$bindsym_code $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    $bindsym_code Left resize shrink width 10px or 10ppt
+    $bindsym_code Down resize grow height 10px or 10ppt
+    $bindsym_code Up resize shrink height 10px or 10ppt
+    $bindsym_code Right resize grow width 10px or 10ppt
+
+    # Return to default mode
+    $bindsym_code Return mode "default"
+    $bindsym_code Escape mode "default"
+}
+$bindsym_code --no-repeat $mod+r mode "resize"
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar  bar-0 {
+    swaybar_command waybar
+    position top
+    mode dock
+}
+
+include /etc/sway/config.d/*
+
+###    CUSTOM    ###
+
+# Window title format
+font pango:Cantarell 8
+titlebar_border_thickness 1
+titlebar_padding 1
+
+# Copy-paste across windows
+exec_always wl-paste -t text --watch clipman store --no-persist
+
+# Workspaces
+
+workspace 1 output primary 0
+workspace 3 output primary 0
+workspace 5 output primary 0
+workspace 7 output primary 0
+workspace 9 output primary 0
+workspace 2 output 1 eDP-1
+workspace 4 output 1 eDP-1
+workspace 6 output 1 eDP-1
+workspace 8 output 1 eDP-1
+workspace 10 output 1 eDP-1
+
+hide_edge_borders smart
+#focus_display_urgency_hint 500 ms
+# TODO: fix autoxrandr
+#exec_always --no-startup-id autoxrandr
+
+focus_wrapping no
+
+# Custom hotkeys
+# Split terminals
+#$bindsym_code --no-repeat Ctrl+Shift+e [class="(?i)*term*"] split h, exec $term
+$bindsym_code --no-repeat Ctrl+Shift+e split h, exec $term
+$bindsym_code --no-repeat Ctrl+Shift+o split v, exec $term
+
+# lock
+$bindsym_code --no-repeat Ctrl+Mod1+l exec swaylock -Ff -c 000000 --indicator-radius 100
+$bindsym_code --no-repeat Ctrl+Mod1+BackSpace exec swaymsg exit
+
+# Screenshot
+for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
+
+# scrot & gimp - root
+#$bindsym_code --no-repeat --release Print exec --no-startup-id flameshot $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
+#$bindsym_code --no-repeat --release $mod+Print exec --no-startup-id flameshot -u $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
+#$bindsym_code --no-repeat --release $mod+Shift+Print exec --no-startup-id flameshot -s $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
