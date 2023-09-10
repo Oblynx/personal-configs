@@ -119,24 +119,11 @@ fi
 PS1="${_PS1}\$ "
 
 ###   CUSTOM   ###
+
 # Add to path
 export PATH=~/.local/bin:$PATH
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib64/python2.7/site-packages/
-export ATOM_DEV_RESOURCE_PATH=~/ws/var/atom
 export ELECTRON_TRASH=gio
-alias kc="snap run kubectl"
-source <(kc completion bash)
-complete -F __start_kubectl kc
-#complete -F __start_kubectl oc
-
-# Microk8s: if active, load completion
-if [[ $(systemctl list-units "*microk8s.daemon*" | grep ' active ' | wc -l) > 0 ]]; then
-  alias mkc="microk8s kubectl"
-  alias mhelm="microk8s helm3"
-  source <(mkc completion bash)
-  complete -F __start_kubectl mkc
-fi
-
 export PATH=~/go/bin:$PATH
 export GO111MODULE=on
 export GOROOT="/usr/lib/golang"
@@ -145,10 +132,24 @@ export VISUAL=$EDITOR
 export ZOOM_HOME=$HOME/.zoom
 export AWS_DEFAULT_REGION=eu-central-1
 
+### Kubernetes ###
+
 # Protect PROD clusters by always requiring an explicit KUBECONFIG assignment before accessing
 # KUBECONFIG needs to be set before `kc login`
 export KUBECONFIG=/tmp
+alias kc="snap run kubectl"
+#source <(kc completion bash)
+#complete -F __start_kubectl kc
+# Microk8s: if active, load completion
+#if [[ $(systemctl list-units "*microk8s.daemon*" | grep ' active ' | wc -l) > 0 ]]; then
+#  alias mkc="microk8s kubectl"
+#  alias mhelm="microk8s helm3"
+#  source <(mkc completion bash)
+#  complete -F __start_kubectl mkc
+#fi
 
 # Load custom kubectl prompt
-KUBE_PS1_NS_ENABLE=false
-. ~/ws/var/personal_confs/kube-ps1.sh
+#KUBE_PS1_NS_ENABLE=false
+#. ~/ws/var/personal_confs/kube-ps1.sh
+
+. "$HOME/.cargo/env"
