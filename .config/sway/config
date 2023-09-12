@@ -19,7 +19,7 @@ set $term gnome-terminal
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu ulauncher | xargs swaymsg exec --
+set $menu tofi-drun | xargs swaymsg exec --
 
 # Ensure sway commands work with other keyboard layouts
 set $bindsym_code bindsym --to-code
@@ -29,7 +29,8 @@ include /etc/sway/config-vars.d/*
 ### Output configuration
 #
 # Wallpaper
-output * bg /usr/share/backgrounds/winter-is-leaving_by_Gixo-light.png fill
+output * bg "/home/oblivion/Pictures/wallpapers/Watching The Change HDR Wallpaper.jpg" fill
+#"/usr/share/backgrounds/winter-is-leaving_by_Gixo-light.png fill
 
 #
 # Example configuration:
@@ -59,12 +60,16 @@ output eDP-1 {
 #
 
 exec swayidle -w \
-         timeout 400 'swaylock -Ff -c 000000 --indicator-radius 100' \
-         timeout 430 'swaymsg "output * dpms off"' \
+         timeout 600 'notify-send -e -t 60 -u critical "🥱"' \
+         timeout 615 'swaylock -Ff -c 000000 --indicator-radius 100' \
+         timeout 625 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
          before-sleep 'playerctl pause' \
          before-sleep 'swaylock -Ff -c 000000 --indicator-radius 100' \
-         after-resume 'swaylock -Ff -c 000000 --indicator-radius 100'
+         after-resume 'swaylock -Ff -c 000000 --indicator-radius 100';
+
+# BUG: GTK+ apps take 20sec to start https://github.com/swaywm/sway/wiki#gtk-applications-take-20-seconds-to-start
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -263,7 +268,7 @@ $bindsym_code --no-repeat $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 bar  bar-0 {
     swaybar_command waybar
-    position top
+    position bottom
     mode dock
 }
 
