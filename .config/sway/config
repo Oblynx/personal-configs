@@ -40,14 +40,15 @@ output * bg "/home/oblivion/Pictures/wallpapers/Watching The Change HDR Wallpape
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
 output * {
-  adaptive_sync on
   # This command is experimental. Read `man sway-output`
   # NOTE: some things actually don't work if we change this
   #render_bit_depth 10
+  max_render_time 2
 }
 
 output eDP-1 {
   # NOTE: fractional scaling causes blurring!
+  adaptive_sync on
   scale 2
 }
 
@@ -60,7 +61,7 @@ output eDP-1 {
 #
 
 exec swayidle -w \
-         timeout 600 'notify-send -e -t 60 -u critical "🥱"' \
+         timeout 600 'notify-send -e -t 30000 -u normal "🥱"' \
          timeout 615 'swaylock -Ff -c 000000 --indicator-radius 100' \
          timeout 625 'swaymsg "output * dpms off"' \
          resume 'swaymsg "output * dpms on"' \
@@ -278,23 +279,24 @@ include /etc/sway/config.d/*
 
 # Window title format
 font pango:Cantarell 8
-titlebar_border_thickness 1
+default_border pixel 2
+titlebar_border_thickness 0
 titlebar_padding 1
 
 # Copy-paste across windows
-exec_always wl-paste -t text --watch clipman store --no-persist
+#exec_always wl-paste -t text --watch clipman store --no-persist
 
 # Workspaces
 
-workspace 1 output primary 0
-workspace 3 output primary 0
-workspace 5 output primary 0
-workspace 7 output primary 0
-workspace 9 output primary 0
-workspace 2 output 1 eDP-1
-workspace 4 output 1 eDP-1
-workspace 6 output 1 eDP-1
-workspace 8 output 1 eDP-1
+workspace 1  output DP-3 0
+workspace 3  output DP-3 0
+workspace 5  output DP-3 0
+workspace 7  output DP-3 0
+workspace 9  output DP-3 0
+workspace 2  output 1 eDP-1
+workspace 4  output 1 eDP-1
+workspace 6  output 1 eDP-1
+workspace 8  output 1 eDP-1
 workspace 10 output 1 eDP-1
 
 hide_edge_borders smart
@@ -314,10 +316,7 @@ $bindsym_code --no-repeat Ctrl+Shift+o split v, exec $term
 $bindsym_code --no-repeat Ctrl+Mod1+l exec swaylock -Ff -c 000000 --indicator-radius 100
 $bindsym_code --no-repeat Ctrl+Mod1+BackSpace exec swaymsg exit
 
-# Screenshot
+# Simple screenshot
+$bindsym_code --no-repeat --release Print exec --no-startup-id slurp | grim -g - $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
+# Fancy screenshot
 for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
-
-# scrot & gimp - root
-#$bindsym_code --no-repeat --release Print exec --no-startup-id flameshot $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
-#$bindsym_code --no-repeat --release $mod+Print exec --no-startup-id flameshot -u $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
-#$bindsym_code --no-repeat --release $mod+Shift+Print exec --no-startup-id flameshot -s $HOME/Pictures/screenshots/`date +%Y-%m-%d_%H:%M:%S`.png
