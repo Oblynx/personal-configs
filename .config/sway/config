@@ -46,14 +46,21 @@ output * {
   max_render_time 2
 }
 
-output eDP-1 {
+output "BNQ BenQ EW3270U 77P00503019" {
+  adaptive_sync on
+  scale 1.6
+}
+
+output "Samsung Display Corp. 0x414D Unknown" {
   # NOTE: fractional scaling causes blurring!
   adaptive_sync on
   scale 2
 }
 
 # TODO: setup clamshell mode https://github.com/swaywm/sway/wiki#clamshell-mode
-
+bindswitch --reload --locked lid:on output eDP-1 disable
+bindswitch --reload --locked lid:off output eDP-1 enable
+exec_always /home/oblivion/.local/bin/toggle_iScreen_lid.sh
 
 ### Idle configuration
 #
@@ -61,10 +68,10 @@ output eDP-1 {
 #
 
 exec swayidle -w \
-         timeout 600 'notify-send -e -t 30000 -u normal "🥱"' \
-         timeout 615 'swaylock -Ff -c 000000 --indicator-radius 100' \
-         timeout 625 'swaymsg "output * dpms off"' \
-         resume 'swaymsg "output * dpms on"' \
+         timeout 800 'notify-send -e -t 30000 -u normal "🥱"' \
+         timeout 830 'swaymsg "output * power off"' \
+         timeout 830 'swaylock -Ff -c 000000 --indicator-radius 100' \
+         resume 'swaymsg "output * power on"' \
          before-sleep 'playerctl pause' \
          before-sleep 'swaylock -Ff -c 000000 --indicator-radius 100' \
          after-resume 'swaylock -Ff -c 000000 --indicator-radius 100';
@@ -113,7 +120,7 @@ input "1267:11557:ELAN900C:00_04F3:2D25" {
 ### Key bindings
 # Special keys:
 # TODO: enable
-$bindsym_code --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.2 @DEFAULT_AUDIO_SINK@ 10%+
+$bindsym_code --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 10%+
 $bindsym_code --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 10%-
 $bindsym_code --locked --no-repeat XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 $bindsym_code --no-repeat XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
@@ -267,7 +274,7 @@ $bindsym_code --no-repeat $mod+r mode "resize"
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-bar  bar-0 {
+bar bar-0 {
     swaybar_command waybar
     position bottom
     mode dock
@@ -287,17 +294,18 @@ titlebar_padding 1
 #exec_always wl-paste -t text --watch clipman store --no-persist
 
 # Workspaces
+# swaymsg -t get_outputs
 
-workspace 1  output DP-3 0
-workspace 3  output DP-3 0
-workspace 5  output DP-3 0
-workspace 7  output DP-3 0
-workspace 9  output DP-3 0
-workspace 2  output 1 eDP-1
-workspace 4  output 1 eDP-1
-workspace 6  output 1 eDP-1
-workspace 8  output 1 eDP-1
-workspace 10 output 1 eDP-1
+workspace 1  output DP-2 DP-3 DP-4 eDP-1
+workspace 3  output DP-2 DP-3 DP-4 eDP-1
+workspace 5  output DP-2 DP-3 DP-4 eDP-1
+workspace 7  output DP-2 DP-3 DP-4 eDP-1
+workspace 9  output DP-2 DP-3 DP-4 eDP-1
+workspace 2  output eDP-1 DP-2 DP-3 DP-4
+workspace 4  output eDP-1 DP-2 DP-3 DP-4
+workspace 6  output eDP-1 DP-2 DP-3 DP-4
+workspace 8  output eDP-1 DP-2 DP-3 DP-4
+workspace 10 output eDP-1 DP-2 DP-3 DP-4
 
 hide_edge_borders smart
 #focus_display_urgency_hint 500 ms

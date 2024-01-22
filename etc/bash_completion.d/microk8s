@@ -1,0 +1,12 @@
+# Load kubernetes completions
+alias kc="snap run kubectl"
+source <(kc completion bash)
+complete -F __start_kubectl kc
+
+# Microk8s: if active, load completion
+if [[ $(systemctl list-units "*microk8s.daemon*" | grep ' active ' | wc -l) > 0 ]]; then
+  alias mkc="microk8s kubectl"
+  alias mhelm="microk8s helm3"
+  source <(mkc completion bash)
+  complete -F __start_kubectl mkc
+fi

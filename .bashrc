@@ -125,8 +125,6 @@ export PATH=~/.local/bin:$PATH
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib64/python2.7/site-packages/
 export ELECTRON_TRASH=gio
 export PATH=~/go/bin:$PATH
-export GO111MODULE=on
-export GOROOT="/usr/lib/golang"
 export EDITOR=vim
 export VISUAL=$EDITOR
 export ZOOM_HOME=$HOME/.zoom
@@ -137,7 +135,9 @@ export AWS_DEFAULT_REGION=eu-central-1
 # Protect PROD clusters by always requiring an explicit KUBECONFIG assignment before accessing
 # KUBECONFIG needs to be set before `kc login`
 export KUBECONFIG=/tmp
-alias kc="snap run kubectl"
+
+# { This section is enabled in `/etc/bash_completion.d/microk8s`
+#alias kc="snap run kubectl"
 #source <(kc completion bash)
 #complete -F __start_kubectl kc
 # Microk8s: if active, load completion
@@ -147,6 +147,7 @@ alias kc="snap run kubectl"
 #  source <(mkc completion bash)
 #  complete -F __start_kubectl mkc
 #fi
+# }
 
 # Load custom kubectl prompt
 #KUBE_PS1_NS_ENABLE=false
