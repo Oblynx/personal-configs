@@ -8,12 +8,9 @@
 [push]
   autoSetupRemote = true
 [credential]
-  helper = store --file XXX
   helper = cache --timeout=7200
 [init]
 	defaultBranch = main
-[includeIf "gitdir:~/ws/orig/idun/"]
-  path = .gitconfig-idun
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
