@@ -1,0 +1,18 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+  {
+    "key": "shift+cmd+[IntlBackslash]",
+    "command": "workbench.action.focusPanel",
+    "when": "!panelFocus"
+  },
+  {
+    "key": "cmd+[IntlBackslash]",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "panelFocus || terminalFocus"
+  },
+  {
+    "key": "cmd+[IntlBackslash]",
+    "command": "terminal.focus",
+    "when": "!panelFocus && !terminalFocus"
+  }
+]
